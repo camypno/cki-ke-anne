@@ -1,0 +1,2 @@
+var SUPABASE_URL = 'https://ibiekiehqknrpnfjmgdj.supabase.co';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImliaWVraWVocWtucnBuZmptZ2RqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwOTEzOTQsImV4cCI6MjA5NjY2NzM5NH0.KF_Ur5rOlF_5i1sPbFhDYV4RSRnplsj_Rr7U8vv6uQ8';
