@@ -396,13 +396,8 @@ var SUPA_URL = window.SUPABASE_URL;
 var SUPA_KEY = window.SUPABASE_ANON_KEY;
 
 if(!SUPA_URL || !SUPA_KEY){
-  document.body.innerHTML='<div style="font-family:sans-serif;padding:40px;text-align:center">'
-    +'<div style="font-size:3rem">⚠️</div>'
-    +'<h2 style="margin:16px 0 8px">config.js introuvable</h2>'
-    +'<p style="color:#666">Le fichier config.js avec les clés Supabase ne charge pas correctement.<br>'
-    +'Vérifie qu'il est bien présent dans ton dépôt GitHub à la racine.</p>'
-    +'</div>';
-  throw new Error('config.js manquant ou SUPABASE_URL/SUPABASE_ANON_KEY non définis');
+  document.body.innerHTML="<div style='font-family:sans-serif;padding:40px;text-align:center'><div style='font-size:3rem'>&#x26A0;</div><h2>config.js introuvable</h2><p>Verifie que config.js est bien present dans GitHub a la racine.</p></div>";
+  throw new Error("config.js manquant - SUPABASE_URL ou SUPABASE_ANON_KEY non definis");
 }
 
 var sb = supabase.createClient(SUPA_URL, SUPA_KEY);
