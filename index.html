@@ -627,7 +627,7 @@ async function loadApp(){
     t.classList.add('on');
     document.getElementById('p-'+t.dataset.tab).classList.add('on');
     if(t.dataset.tab==='semaine') loadSemaine();
-    if(t.dataset.tab==='stats')   setTimeout(function(){loadStats();drawCharts()},50);
+    if(t.dataset.tab==='stats')   setTimeout(function(){loadStats()},50);
     if(t.dataset.tab==='ligues')  buildLigues();
     if(t.dataset.tab==='mur')     loadMur();
     if(t.dataset.tab==='admin')   return;
@@ -639,7 +639,7 @@ async function loadApp(){
     activePeriod=t.dataset.period;
     document.querySelectorAll('#period-tabs .ptab').forEach(function(x){x.classList.remove('on')});
     t.classList.add('on');
-    setTimeout(function(){loadStats();drawCharts()},30);
+    loadStats();
   });
 }
 
