@@ -190,7 +190,19 @@ canvas{display:block}
   .logo{font-size:1.2rem}
   .games-grid,.gbreak{grid-template-columns:1fr}
 }
+
+/* MUR */
+.mur-msg{background:var(--card);border:2px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;box-shadow:0 3px 0 var(--border)}
+.mur-msg.mine{border-color:var(--yellow2);box-shadow:0 3px 0 var(--yellow2)}
+.mur-header{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.mur-av{font-size:1.2rem}
+.mur-name{font-weight:800;font-size:.88rem}
+.mur-date{font-size:.75rem;color:var(--muted);margin-left:auto}
+.mur-text{font-size:.92rem;line-height:1.5;color:var(--text)}
+.mur-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.8rem;margin-left:6px;padding:2px 6px;border-radius:6px}
+.mur-del:hover{color:var(--red);background:#fee2e2}
 </style>
+<script src="config.js"></script>
 </head>
 <body>
 
@@ -242,6 +254,7 @@ canvas{display:block}
     <div class="tab" data-tab="stats">📈 Stats</div>
     <div class="tab" data-tab="ligues">⚽ Ligues</div>
     <div class="tab" data-tab="profil">👤 Profil</div>
+    <div class="tab" data-tab="mur">💬 Mur</div>
   </div>
 
   <!-- SCORES -->
@@ -335,7 +348,13 @@ canvas{display:block}
             <div class="pfemail" id="pf-email">...</div>
           </div>
         </div>
-        <div class="flabel">Avatar</div>
+        <div class="field" style="margin-bottom:14px">
+          <label class="flabel" style="margin-bottom:6px">Pseudo</label>
+          <input type="text" id="inp-username-edit" maxlength="20" placeholder="Ton pseudo"
+            style="width:100%;background:var(--bg);border:2px solid var(--border);color:var(--text);padding:9px 13px;border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:1rem;outline:none;-webkit-appearance:none"
+            onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--border)'"/>
+        </div>
+        <div class="flabel" style="margin-bottom:6px">Avatar</div>
         <div class="egrid" id="emoji-grid"></div>
         <button class="btn" style="margin-top:15px;width:100%" onclick="saveProfile()">💾 Sauvegarder</button>
       </div>
@@ -350,6 +369,19 @@ canvas{display:block}
       </div>
     </div>
   </div>
+
+  <!-- MUR DE LA HONTE -->
+  <div class="page" id="p-mur">
+    <div class="stitle">💬 Mur de la honte</div>
+    <div class="pcard" style="margin-bottom:18px">
+      <div class="flabel" style="margin-bottom:8px">Laisse un message</div>
+      <textarea id="mur-input" placeholder="Écris ce que tu veux... 😈" maxlength="500"
+        style="width:100%;background:var(--bg);border:2px solid var(--border);color:var(--text);padding:10px 13px;border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:.95rem;outline:none;resize:vertical;min-height:80px;-webkit-appearance:none"
+        onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <button class="btn" style="margin-top:10px" onclick="postMurMessage()">📨 Envoyer</button>
+    </div>
+    <div id="mur-messages"><div class="loading">⏳</div></div>
+  </div>
 </div>
 
 <div class="toast" id="toast" style="display:none"></div>
@@ -359,13 +391,9 @@ canvas{display:block}
 ══════════════════════════════════════════════════════ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-// ╔══════════════════════════════════════════════════════╗
-// ║  ⚠️  REMPLACE CES DEUX VALEURS AVEC TES CLÉS        ║
-// ║     Supabase → Settings → API                        ║
-// ╚══════════════════════════════════════════════════════╝
-var SUPA_URL = 'https://ibiekiehqknrpnfjmgdj.supabase.co';
-var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImliaWVraWVocWtucnBuZmptZ2RqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwOTEzOTQsImV4cCI6MjA5NjY2NzM5NH0.KF_Ur5rOlF_5i1sPbFhDYV4RSRnplsj_Rr7U8vv6uQ8';
-// ══════════════════════════════════════════════════════
+// Clés chargées depuis config.js (ne pas modifier ici)
+var SUPA_URL = window.SUPABASE_URL;
+var SUPA_KEY = window.SUPABASE_ANON_KEY;
 
 var sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
@@ -543,6 +571,7 @@ async function loadApp(){
     if(t.dataset.tab==='semaine') loadSemaine();
     if(t.dataset.tab==='stats')   setTimeout(function(){loadStats();drawCharts()},50);
     if(t.dataset.tab==='ligues')  buildLigues();
+    if(t.dataset.tab==='mur')     loadMur();
   });
 
   // period tabs
@@ -999,10 +1028,14 @@ function pickAv(e){
 }
 
 async function saveProfile(){
-  var {error}=await sb.from('profiles').upsert({id:currentUser.id,username:currentProfile.username,avatar:curAv},{onConflict:'id'});
+  var newUsername = document.getElementById('inp-username-edit').value.trim();
+  if(!newUsername){showToast('⚠️ Le pseudo ne peut pas être vide !');return}
+  var {error}=await sb.from('profiles').upsert({id:currentUser.id,username:newUsername,avatar:curAv},{onConflict:'id'});
   if(error){showToast('❌ Erreur: '+error.message);return}
+  currentProfile.username=newUsername;
   currentProfile.avatar=curAv;
-  document.getElementById('header-user').textContent=curAv+' '+currentProfile.username;
+  document.getElementById('pf-name').textContent=newUsername;
+  document.getElementById('header-user').textContent=curAv+' '+newUsername;
   showToast('✅ Profil sauvegardé !');
 }
 
@@ -1025,6 +1058,59 @@ async function loadProfileStats(){
   // Wins and Anne count — needs full day data, approximate with available data
   document.getElementById('stat-wins').textContent='—';
   document.getElementById('stat-anne').textContent='—';
+}
+
+
+// ── MUR DE LA HONTE ────────────────────────────────────
+async function loadMur(){
+  document.getElementById('mur-messages').innerHTML='<div class="loading">⏳</div>';
+  var {data,error}=await sb.from('mur_messages')
+    .select('*, profiles(username,avatar)')
+    .order('created_at',{ascending:false})
+    .limit(50);
+  if(error){
+    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px">La table mur_messages n'existe pas encore.<br/>Exécute le SQL dans Supabase (voir guide).</p>';
+    return;
+  }
+  if(!data||!data.length){
+    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px;text-align:center">Aucun message pour l'instant. Sois le premier ! 😈</p>';
+    return;
+  }
+  var html='';
+  var months=['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+  data.forEach(function(msg){
+    var p=msg.profiles||{};
+    var isMe=msg.user_id===currentUser.id;
+    var d=new Date(msg.created_at);
+    var dateStr=d.getDate()+' '+months[d.getMonth()]+' '+d.getHours()+'h'+(d.getMinutes()<10?'0':'')+d.getMinutes();
+    html+='<div class="mur-msg'+(isMe?' mine':'')+'">';
+    html+='<div class="mur-header">';
+    html+='<span class="mur-av">'+(p.avatar||'🦊')+'</span>';
+    html+='<span class="mur-name">'+(p.username||'?')+'</span>';
+    html+='<span class="mur-date">'+dateStr+'</span>';
+    if(isMe) html+='<button class="mur-del" onclick="deleteMurMsg(''+msg.id+'')">🗑</button>';
+    html+='</div>';
+    html+='<div class="mur-text">'+msg.content.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')+'</div>';
+    html+='</div>';
+  });
+  document.getElementById('mur-messages').innerHTML=html;
+}
+
+async function postMurMessage(){
+  var content=document.getElementById('mur-input').value.trim();
+  if(!content){showToast('⚠️ Écris quelque chose !');return}
+  var {error}=await sb.from('mur_messages').insert({user_id:currentUser.id,content:content});
+  if(error){showToast('❌ Erreur: '+error.message);return}
+  document.getElementById('mur-input').value='';
+  showToast('✅ Message envoyé !');
+  loadMur();
+}
+
+async function deleteMurMsg(id){
+  var {error}=await sb.from('mur_messages').delete().eq('id',id).eq('user_id',currentUser.id);
+  if(error){showToast('❌ Erreur: '+error.message);return}
+  showToast('🗑 Message supprimé');
+  loadMur();
 }
 
 // ── INIT ───────────────────────────────────────────────
