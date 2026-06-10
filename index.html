@@ -1121,7 +1121,7 @@ async function loadProfileStats(){
 
 
 // ── MUR DE LA HONTE ────────────────────────────────────
-var MUR_REACTIONS = ['&#x1F602;','&#x1F525;','&#x1F451;','&#x1F351;','&#x1F480;','&#x1F44F;'];
+var MUR_REACTIONS = ['\uD83D\uDE02','\uD83D\uDD25','\uD83D\uDC51','\uD83C\uDF51','\uD83D\uDC80','\uD83D\uDC4F'];
 
 async function loadMur(){
   document.getElementById('mur-messages').innerHTML='<div class="loading">&#x23F3;</div>';
@@ -1186,18 +1186,20 @@ async function toggleRxn(msgId, el){
   var emoji = el.dataset.emoji;
   var isMine = el.classList.contains('mine');
   if(isMine){
-    // Remove reaction
     await sb.from('mur_reactions').delete()
       .eq('message_id', msgId)
       .eq('user_id', currentUser.id)
       .eq('emoji', emoji);
   } else {
-    // Add reaction
-    await sb.from('mur_reactions').insert({
-      message_id: msgId,
-      user_id: currentUser.id,
-      emoji: emoji
+    var res = await sb.from('mur_reactions').insert({
+      message_id: msgId, user_id: currentUser.id, emoji: emoji
     });
+    if(res.error && res.error.code === '23505'){
+      await sb.from('mur_reactions').delete()
+        .eq('message_id', msgId)
+        .eq('user_id', currentUser.id)
+        .eq('emoji', emoji);
+    }
   }
   loadMur();
 }
