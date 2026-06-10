@@ -846,6 +846,7 @@ async function loadStats(){
   var {data}=await sb.from('scores').select('*, profiles(username,avatar)').gte('date',dateKey(start)).lte('date',dateKey(today));
   statsData=data||[];
   buildPlayerFilterUI();
+  drawCharts();
 }
 
 function buildPlayerFilterUI(){
