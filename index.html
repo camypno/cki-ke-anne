@@ -391,9 +391,19 @@ canvas{display:block}
 ══════════════════════════════════════════════════════ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-// Clés chargées depuis config.js (ne pas modifier ici)
+// Clés chargées depuis config.js
 var SUPA_URL = window.SUPABASE_URL;
 var SUPA_KEY = window.SUPABASE_ANON_KEY;
+
+if(!SUPA_URL || !SUPA_KEY){
+  document.body.innerHTML='<div style="font-family:sans-serif;padding:40px;text-align:center">'
+    +'<div style="font-size:3rem">⚠️</div>'
+    +'<h2 style="margin:16px 0 8px">config.js introuvable</h2>'
+    +'<p style="color:#666">Le fichier config.js avec les clés Supabase ne charge pas correctement.<br>'
+    +'Vérifie qu'il est bien présent dans ton dépôt GitHub à la racine.</p>'
+    +'</div>';
+  throw new Error('config.js manquant ou SUPABASE_URL/SUPABASE_ANON_KEY non définis');
+}
 
 var sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
@@ -1063,34 +1073,37 @@ async function loadProfileStats(){
 
 // ── MUR DE LA HONTE ────────────────────────────────────
 async function loadMur(){
-  document.getElementById('mur-messages').innerHTML='<div class="loading">⏳</div>';
-  var {data,error}=await sb.from('mur_messages')
+  document.getElementById('mur-messages').innerHTML='<div class="loading">&#x23F3;</div>';
+  var res = await sb.from('mur_messages')
     .select('*, profiles(username,avatar)')
     .order('created_at',{ascending:false})
     .limit(50);
-  if(error){
-    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px">La table mur_messages n\'existe pas encore.<br/>Exécute le SQL dans Supabase (voir guide).</p>';
+  if(res.error){
+    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px">La table mur_messages n&#x27;existe pas encore. Execute le SQL dans Supabase.</p>';
     return;
   }
+  var data = res.data;
   if(!data||!data.length){
-    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px;text-align:center">Aucun message pour l\'instant. Sois le premier !</p>';
+    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px;text-align:center">Aucun message pour l&#x27;instant. Sois le premier !</p>';
     return;
   }
   var html='';
-  var months=['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+  var months=['jan','fev','mar','avr','mai','jun','jul','aou','sep','oct','nov','dec'];
   data.forEach(function(msg){
     var p=msg.profiles||{};
     var isMe=msg.user_id===currentUser.id;
     var d=new Date(msg.created_at);
     var dateStr=d.getDate()+' '+months[d.getMonth()]+' '+d.getHours()+'h'+(d.getMinutes()<10?'0':'')+d.getMinutes();
+    var delBtn=isMe?'<button class="mur-del" onclick="deleteMurMsg('+msg.id+')">&#x1F5D1;</button>':'';
+    var content=msg.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     html+='<div class="mur-msg'+(isMe?' mine':'')+'">';
     html+='<div class="mur-header">';
-    html+='<span class="mur-av">'+(p.avatar||'🦊')+'</span>';
+    html+='<span class="mur-av">'+(p.avatar||'&#x1F98A;')+'</span>';
     html+='<span class="mur-name">'+(p.username||'?')+'</span>';
     html+='<span class="mur-date">'+dateStr+'</span>';
-    if(isMe) html+='<button class="mur-del" onclick="deleteMurMsg(''+msg.id+'')">🗑</button>';
+    html+=delBtn;
     html+='</div>';
-    html+='<div class="mur-text">'+msg.content.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')+'</div>';
+    html+='<div class="mur-text">'+content+'</div>';
     html+='</div>';
   });
   document.getElementById('mur-messages').innerHTML=html;
@@ -1107,9 +1120,9 @@ async function postMurMessage(){
 }
 
 async function deleteMurMsg(id){
-  var {error}=await sb.from('mur_messages').delete().eq('id',id).eq('user_id',currentUser.id);
-  if(error){showToast('❌ Erreur: '+error.message);return}
-  showToast('🗑 Message supprimé');
+  var res=await sb.from('mur_messages').delete().eq('id',id).eq('user_id',currentUser.id);
+  if(res.error){showToast('Erreur: '+res.error.message);return}
+  showToast('Message supprime');
   loadMur();
 }
 
