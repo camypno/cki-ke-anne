@@ -191,6 +191,17 @@ canvas{display:block}
   .games-grid,.gbreak{grid-template-columns:1fr}
 }
 
+
+/* REACTIONS */
+.mur-reactions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.rxn{display:flex;align-items:center;gap:4px;background:var(--bg);border:2px solid var(--border);
+  border-radius:20px;padding:3px 10px;cursor:pointer;font-size:.85rem;font-weight:800;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;color:var(--text2)}
+.rxn:hover{border-color:var(--yellow);background:var(--card2)}
+.rxn.mine{background:var(--card2);border-color:var(--yellow);color:var(--text)}
+.rxn-emoji{font-size:1rem}
+.rxn-count{font-size:.8rem;font-weight:900;min-width:8px}
+
 /* MUR */
 .mur-msg{background:var(--card);border:2px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:12px;box-shadow:0 3px 0 var(--border)}
 .mur-msg.mine{border-color:var(--yellow2);box-shadow:0 3px 0 var(--yellow2)}
@@ -1110,6 +1121,8 @@ async function loadProfileStats(){
 
 
 // ── MUR DE LA HONTE ────────────────────────────────────
+var MUR_REACTIONS = ['&#x1F602;','&#x1F525;','&#x1F451;','&#x1F351;','&#x1F480;','&#x1F44F;'];
+
 async function loadMur(){
   document.getElementById('mur-messages').innerHTML='<div class="loading">&#x23F3;</div>';
   var res = await sb.from('mur_messages')
@@ -1125,6 +1138,11 @@ async function loadMur(){
     document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px;text-align:center">Aucun message pour l&#x27;instant. Sois le premier !</p>';
     return;
   }
+  // Load reactions for all messages
+  var msgIds = data.map(function(m){return m.id});
+  var rxnRes = await sb.from('mur_reactions').select('*').in('message_id', msgIds);
+  var allRxns = rxnRes.data || [];
+
   var html='';
   var months=['jan','fev','mar','avr','mai','jun','jul','aou','sep','oct','nov','dec'];
   data.forEach(function(msg){
@@ -1134,7 +1152,23 @@ async function loadMur(){
     var dateStr=d.getDate()+' '+months[d.getMonth()]+' '+d.getHours()+'h'+(d.getMinutes()<10?'0':'')+d.getMinutes();
     var delBtn=isMe?'<button class="mur-del" onclick="deleteMurMsg('+msg.id+')">&#x1F5D1;</button>':'';
     var content=msg.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    html+='<div class="mur-msg'+(isMe?' mine':'')+'">';
+
+    // Build reactions bar
+    var msgRxns = allRxns.filter(function(r){return r.message_id===msg.id});
+    var rxnHtml = '<div class="mur-reactions">';
+    MUR_REACTIONS.forEach(function(emoji){
+      var emojiRxns = msgRxns.filter(function(r){return r.emoji===emoji});
+      var count = emojiRxns.length;
+      var iMine = emojiRxns.some(function(r){return r.user_id===currentUser.id});
+      rxnHtml += '<span class="rxn'+(iMine?' mine':'')+'" onclick="toggleRxn('+msg.id+',this)"'
+        +' data-emoji="'+emoji+'">'
+        +'<span class="rxn-emoji">'+emoji+'</span>'
+        +(count>0?'<span class="rxn-count">'+count+'</span>':'')
+        +'</span>';
+    });
+    rxnHtml += '</div>';
+
+    html+='<div class="mur-msg'+(isMe?' mine':'')+'" id="murm-'+msg.id+'">';
     html+='<div class="mur-header">';
     html+='<span class="mur-av">'+(p.avatar||'&#x1F98A;')+'</span>';
     html+='<span class="mur-name">'+(p.username||'?')+'</span>';
@@ -1142,9 +1176,30 @@ async function loadMur(){
     html+=delBtn;
     html+='</div>';
     html+='<div class="mur-text">'+content+'</div>';
+    html+=rxnHtml;
     html+='</div>';
   });
   document.getElementById('mur-messages').innerHTML=html;
+}
+
+async function toggleRxn(msgId, el){
+  var emoji = el.dataset.emoji;
+  var isMine = el.classList.contains('mine');
+  if(isMine){
+    // Remove reaction
+    await sb.from('mur_reactions').delete()
+      .eq('message_id', msgId)
+      .eq('user_id', currentUser.id)
+      .eq('emoji', emoji);
+  } else {
+    // Add reaction
+    await sb.from('mur_reactions').insert({
+      message_id: msgId,
+      user_id: currentUser.id,
+      emoji: emoji
+    });
+  }
+  loadMur();
 }
 
 async function postMurMessage(){
