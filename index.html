@@ -1069,11 +1069,11 @@ async function loadMur(){
     .order('created_at',{ascending:false})
     .limit(50);
   if(error){
-    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px">La table mur_messages n'existe pas encore.<br/>Exécute le SQL dans Supabase (voir guide).</p>';
+    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px">La table mur_messages n\'existe pas encore.<br/>Exécute le SQL dans Supabase (voir guide).</p>';
     return;
   }
   if(!data||!data.length){
-    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px;text-align:center">Aucun message pour l'instant. Sois le premier ! 😈</p>';
+    document.getElementById('mur-messages').innerHTML='<p style="color:var(--muted);padding:16px;text-align:center">Aucun message pour l\'instant. Sois le premier !</p>';
     return;
   }
   var html='';
