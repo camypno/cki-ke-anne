@@ -255,6 +255,7 @@ canvas{display:block}
     <div class="tab" data-tab="ligues">⚽ Ligues</div>
     <div class="tab" data-tab="profil">👤 Profil</div>
     <div class="tab" data-tab="mur">💬 Mur</div>
+    <div class="tab" id="tab-admin" data-tab="admin" style="display:none">🔧 Admin</div>
   </div>
 
   <!-- SCORES -->
@@ -367,6 +368,46 @@ canvas{display:block}
           <div class="schip"><div class="sval" id="stat-game">—</div><div class="slbl">Jeu favori</div></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="page" id="p-admin">
+    <div class="stitle">🔧 Admin <span class="dbadge">Camille uniquement</span></div>
+    <div class="pcard" style="max-width:480px">
+      <div class="flabel" style="margin-bottom:12px">Saisir un score manuellement</div>
+      <div class="field" style="margin-bottom:12px">
+        <label class="flabel">Joueur</label>
+        <select id="admin-player" style="width:100%;background:var(--bg);border:2px solid var(--border);color:var(--text);padding:9px 13px;border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:1rem;outline:none;-webkit-appearance:none">
+          <option value="">-- Choisir --</option>
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:12px">
+        <label class="flabel">Jeu</label>
+        <select id="admin-game" style="width:100%;background:var(--bg);border:2px solid var(--border);color:var(--text);padding:9px 13px;border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:1rem;outline:none;-webkit-appearance:none">
+          <option value="zip">⚡ Zip</option>
+          <option value="queens">👑 Queens</option>
+          <option value="tango">💃 Tango</option>
+          <option value="sudoku">🔢 Sudoku</option>
+          <option value="patch">🩹 Patch</option>
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:12px">
+        <label class="flabel">Date</label>
+        <input type="date" id="admin-date" style="width:100%;background:var(--bg);border:2px solid var(--border);color:var(--text);padding:9px 13px;border-radius:var(--rs);font-family:'Nunito',sans-serif;font-size:1rem;outline:none;-webkit-appearance:none"/>
+      </div>
+      <div class="field" style="margin-bottom:16px">
+        <label class="flabel">Temps</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="text" id="admin-mm" inputmode="numeric" placeholder="0" maxlength="2"
+            style="width:52px;text-align:center;background:var(--bg);border:2px solid var(--border);color:var(--text);padding:8px;border-radius:var(--rs);font-family:'Fredoka One',cursive;font-size:1.1rem;outline:none;-webkit-appearance:none"/>
+          <span style="font-size:1.2rem;font-weight:900;color:var(--orange)">:</span>
+          <input type="text" id="admin-ss" inputmode="numeric" placeholder="00" maxlength="2"
+            style="width:52px;text-align:center;background:var(--bg);border:2px solid var(--border);color:var(--text);padding:8px;border-radius:var(--rs);font-family:'Fredoka One',cursive;font-size:1.1rem;outline:none;-webkit-appearance:none"/>
+          <span style="font-size:.8rem;color:var(--muted)">minutes : secondes</span>
+        </div>
+      </div>
+      <button class="btn" onclick="adminSaveScore()" style="width:100%">💾 Enregistrer le score</button>
     </div>
   </div>
 
@@ -556,6 +597,7 @@ async function loadApp(){
 
   // update header
   document.getElementById('header-user').textContent=currentProfile.avatar+' '+currentProfile.username;
+  initAdmin();
 
   // show app
   document.getElementById('auth-page').style.display='none';
@@ -577,6 +619,7 @@ async function loadApp(){
     if(t.dataset.tab==='stats')   setTimeout(function(){loadStats();drawCharts()},50);
     if(t.dataset.tab==='ligues')  buildLigues();
     if(t.dataset.tab==='mur')     loadMur();
+    if(t.dataset.tab==='admin')   return;
   });
 
   // period tabs
@@ -1119,6 +1162,51 @@ async function deleteMurMsg(id){
   if(res.error){showToast('Erreur: '+res.error.message);return}
   showToast('Message supprime');
   loadMur();
+}
+
+
+// ── ADMIN ───────────────────────────────────────────────
+var ADMIN_EMAIL = 'camillo.penaud@hotmail.fr';
+
+function initAdmin(){
+  if(!currentUser || currentUser.email !== ADMIN_EMAIL) return;
+  // Show admin tab
+  document.getElementById('tab-admin').style.display='';
+  // Set today as default date
+  document.getElementById('admin-date').value = dateKey(new Date());
+  // Populate player select
+  var sel = document.getElementById('admin-player');
+  sel.innerHTML = '<option value="">-- Choisir --</option>';
+  allProfiles.forEach(function(p){
+    var opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = (p.avatar||'') + ' ' + p.username;
+    sel.appendChild(opt);
+  });
+}
+
+async function adminSaveScore(){
+  var userId  = document.getElementById('admin-player').value;
+  var game    = document.getElementById('admin-game').value;
+  var date    = document.getElementById('admin-date').value;
+  var mm      = parseInt(document.getElementById('admin-mm').value)||0;
+  var ss      = parseInt(document.getElementById('admin-ss').value)||0;
+  var secs    = mm * 60 + ss;
+
+  if(!userId){ showToast('Choisis un joueur !'); return; }
+  if(!date){   showToast('Choisis une date !');  return; }
+  if(secs <= 0){ showToast('Entre un temps valide !'); return; }
+
+  var {error} = await sb.from('scores').upsert(
+    {user_id: userId, game: game, date: date, time_secs: secs},
+    {onConflict: 'user_id,game,date'}
+  );
+  if(error){ showToast('Erreur: ' + error.message); return; }
+
+  showToast('Score enregistre !');
+  // Reset time fields
+  document.getElementById('admin-mm').value = '';
+  document.getElementById('admin-ss').value = '';
 }
 
 // ── INIT ───────────────────────────────────────────────
