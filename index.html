@@ -228,20 +228,22 @@ canvas{display:block}
     </div>
     <div class="auth-card">
       <h2 id="auth-title">Connexion 🔑</h2>
+      <form onsubmit="doAuth();return false;" autocomplete="on">
       <div class="field" id="field-username" style="display:none">
         <label>Pseudo</label>
-        <input type="text" id="inp-username" placeholder="TonSuperbePseudo" autocomplete="username"/>
+        <input type="text" id="inp-username" name="username" placeholder="TonSuperbePseudo" autocomplete="username"/>
       </div>
       <div class="field">
         <label>Email</label>
-        <input type="email" id="inp-email" placeholder="toi@email.com" autocomplete="email"/>
+        <input type="email" id="inp-email" name="email" placeholder="toi@email.com" autocomplete="email"/>
       </div>
       <div class="field">
         <label>Mot de passe</label>
-        <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password"/>
+        <input type="password" id="inp-pass" name="password" placeholder="••••••••" autocomplete="current-password"/>
       </div>
       <div class="err" id="auth-err" style="display:none"></div>
-      <button class="btn-main" id="auth-btn" onclick="doAuth()">Connexion</button>
+      <button type="submit" class="btn-main" id="auth-btn">Connexion</button>
+      </form>
       <div class="auth-toggle" id="auth-toggle">
         Pas encore de compte ? <a onclick="switchMode()">Inscris-toi</a>
       </div>
@@ -1116,7 +1118,7 @@ async function checkMurBadge(){
 function clearMurBadge(){
   localStorage.setItem('murLastSeen', new Date().toISOString());
   var b = document.getElementById('mur-badge');
-  if(b) b.remove();
+  if(b) setTimeout(function(){ if(b.parentNode) b.remove(); }, 1000);
 }
 
 function buildLigues(){
