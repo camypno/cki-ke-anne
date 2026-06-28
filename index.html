@@ -105,6 +105,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .rrow{display:flex;align-items:center;padding:12px 17px;border-bottom:2px dashed var(--border);transition:background .15s}
 .rrow:last-child{border-bottom:none}
 .rrow.me{background:#eff6ff}
+.rrow.absent{opacity:.65}
 .rrow:hover{background:var(--bg)}
 .rnum{width:36px;font-family:'Fredoka One',cursive;font-size:1.2rem;text-align:center;flex-shrink:0}
 .c1{color:var(--yellow)}.c2{color:#94a3b8}.c3{color:#cd7f32}.ca{color:var(--red)}
@@ -272,6 +273,7 @@ canvas{display:block}
   <!-- SCORES -->
   <div class="page" id="p-scores">
     <div class="stitle">📝 Mes scores du jour <span class="dbadge" id="today-label"></span></div>
+    <a href="https://www.linkedin.com/games/" target="_blank" style="display:inline-flex;align-items:center;gap:7px;background:var(--card);border:2px solid var(--border);padding:7px 14px;border-radius:30px;font-weight:800;font-size:.85rem;color:var(--text2);text-decoration:none;margin-bottom:16px;box-shadow:0 2px 0 var(--border)">🎮 Jouer sur LinkedIn</a>
     <div id="weekend-block" style="display:none">
       <div class="weekend-msg"><span class="big">😴</span><p>C'est le week-end ! Repose-toi.</p></div>
     </div>
@@ -514,12 +516,33 @@ function calcGameRank(entries){
 }
 function calcGlobal(perGame){
   var t={};
+  // Add players who DID play
   Object.keys(perGame).forEach(function(g){
     perGame[g].forEach(function(r){
-      if(!t[r.userId]) t[r.userId]={userId:r.userId,username:r.username,avatar:r.avatar,color:r.color,pts:0};
+      if(!t[r.userId]) t[r.userId]={userId:r.userId,username:r.username,avatar:r.avatar,color:r.color,pts:0,played:true};
       t[r.userId].pts+=r.pts;
     });
   });
+  // Penalise players who DIDN'T play
+  // For each game, find the worst rank among players who played
+  var gamesPlayed=Object.keys(perGame);
+  if(gamesPlayed.length>0 && allProfiles && allProfiles.length>0){
+    allProfiles.forEach(function(p){
+      if(!t[p.id]){
+        // Player didn't play at all — give them penalty points for each game
+        // Penalty = nb players who played + 1, for each game
+        var penalty=0;
+        gamesPlayed.forEach(function(g){
+          var worstRank=perGame[g].length+1;
+          penalty+=worstRank;
+        });
+        // Also penalise for games not played by anyone but that exist
+        var missingGames=GAMES.length-gamesPlayed.length;
+        if(missingGames>0) penalty+=missingGames*(Object.values(t).length+2);
+        t[p.id]={userId:p.id,username:p.username,avatar:p.avatar||'&#x1F98A;',color:colorForUser(p.id),pts:penalty,played:false};
+      }
+    });
+  }
   var arr=Object.values(t).sort(function(a,b){return a.pts-b.pts});
   var rank=1;
   arr.forEach(function(x,i){if(i>0&&x.pts!==arr[i-1].pts)rank=i+1;x.rank=rank});
@@ -609,6 +632,8 @@ async function loadApp(){
   // update header
   document.getElementById('header-user').textContent=currentProfile.avatar+' '+currentProfile.username;
   initAdmin();
+  checkMurBadge();
+  setInterval(checkMurBadge, 60000);
 
   // show app
   document.getElementById('auth-page').style.display='none';
@@ -629,7 +654,7 @@ async function loadApp(){
     if(t.dataset.tab==='semaine') loadSemaine();
     if(t.dataset.tab==='stats')   setTimeout(function(){loadStats()},50);
     if(t.dataset.tab==='ligues')  buildLigues();
-    if(t.dataset.tab==='mur')     loadMur();
+    if(t.dataset.tab==='mur')     { loadMur(); clearMurBadge(); }
     if(t.dataset.tab==='admin')   return;
   });
 
@@ -714,6 +739,10 @@ async function sendScores(){
   showToast('✅ Scores envoyés !');
   document.getElementById('send-btn').textContent='🔄 Mettre à jour';
   document.getElementById('sent-msg').style.display='block';
+  // Auto-refresh classement
+  if(viewDate && dateKey(viewDate)===dateKey(new Date())){
+    loadClassement();
+  }
 }
 
 // ── CLASSEMENT ─────────────────────────────────────────
@@ -1045,10 +1074,12 @@ function rankingRow(u,i,total,isMe){
   var isLast=i===total-1&&total>1;
   var medal=u.rank===1?'👑':u.rank===2?'🥈':u.rank===3?'🥉':isLast?'🍑':u.rank;
   var cls=u.rank===1?'c1':u.rank===2?'c2':u.rank===3?'c3':isLast?'ca':'';
-  return '<div class="rrow'+(isMe?' me':'')+'">'
+  var absentBadge=(!u.played&&u.played!==undefined)?' <span class="pill" style="background:#f3f4f6;color:var(--muted);border:1.5px solid var(--border)">absent</span>':'';
+  return '<div class="rrow'+(isMe?' me':'')+' '+((!u.played&&u.played!==undefined)?'absent':'')+'">'
     +'<span class="rnum '+cls+'">'+medal+'</span>'
     +'<span class="rav">'+(u.avatar||'🦊')+'</span>'
     +'<span class="rname">'+(u.username||'?')
+    +absentBadge
     +(isMe?' <span class="pill pill-me">moi</span>':'')
     +(isLast&&!isMe?' <span class="pill pill-r">Anne 🍑</span>':'')
     +'</span>'
@@ -1057,6 +1088,37 @@ function rankingRow(u,i,total,isMe){
 }
 
 // ── LIGUES ─────────────────────────────────────────────
+async function checkMurBadge(){
+  var res = await sb.from('mur_messages')
+    .select('id,created_at')
+    .order('created_at',{ascending:false})
+    .limit(1);
+  if(res.error||!res.data||!res.data.length) return;
+  var lastMsg = new Date(res.data[0].created_at);
+  var lastSeen = localStorage.getItem('murLastSeen');
+  var tabEl = document.querySelector('[data-tab="mur"]');
+  if(!tabEl) return;
+  if(!lastSeen || new Date(lastSeen) < lastMsg){
+    // Show badge
+    if(!document.getElementById('mur-badge')){
+      var badge = document.createElement('span');
+      badge.id = 'mur-badge';
+      badge.textContent = '1';
+      badge.style.cssText = 'display:inline-block;background:var(--red);color:#fff;border-radius:50%;font-size:.6rem;font-weight:900;width:14px;height:14px;line-height:14px;text-align:center;margin-left:4px;vertical-align:middle';
+      tabEl.appendChild(badge);
+    }
+  } else {
+    var b = document.getElementById('mur-badge');
+    if(b) b.remove();
+  }
+}
+
+function clearMurBadge(){
+  localStorage.setItem('murLastSeen', new Date().toISOString());
+  var b = document.getElementById('mur-badge');
+  if(b) b.remove();
+}
+
 function buildLigues(){
   var members=allProfiles.map(function(p){return '<span class="lm">'+p.avatar+' '+p.username+'</span>'}).join('');
   document.getElementById('my-league-card').innerHTML=
@@ -1213,6 +1275,7 @@ async function postMurMessage(){
   document.getElementById('mur-input').value='';
   showToast('✅ Message envoyé !');
   loadMur();
+  checkMurBadge();
 }
 
 async function deleteMurMsg(id){
