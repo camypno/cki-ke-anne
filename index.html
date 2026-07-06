@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#f59e0b"/>
 <title>C ki ké Anne 👑</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet"/>
 <style>
@@ -424,6 +429,15 @@ canvas{display:block}
       </div>
       <button class="btn" onclick="adminSaveScore()" style="width:100%">💾 Enregistrer le score</button>
     </div>
+
+    <div class="pcard" style="max-width:480px;margin-top:16px">
+      <div class="flabel" style="margin-bottom:12px">Actions emails</div>
+      <button class="btn" onclick="adminTriggerRappel()" style="width:100%;margin-bottom:10px">📧 Envoyer les rappels du jour</button>
+      <button class="btn" onclick="adminTriggerRecap()" style="width:100%;background:var(--purple);border-color:#7c3aed;box-shadow:0 4px 0 #7c3aed">📊 Envoyer le récap de la semaine</button>
+      <p style="font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.4">
+        Les rappels ne partent qu'aux joueurs qui n'ont pas encore joué. Le récap part à tout le monde.
+      </p>
+    </div>
   </div>
 
   <!-- MUR DE LA HONTE -->
@@ -493,6 +507,13 @@ GAMES.forEach(function(g){ timeVals[g.slug]={mm:'',ss:''} });
 // ── Helpers ────────────────────────────────────────────
 function fmtS(s){ var m=Math.floor(s/60),sec=s%60; return (m<10?'0':'')+m+':'+(sec<10?'0':'')+sec }
 function dateKey(d){ return d.toISOString().slice(0,10) }
+// Journée de jeu : de 9h à 9h le lendemain. Avant 9h = jour précédent.
+function gameDay(d){
+  var x = new Date(d);
+  if(x.getHours() < 9){ x.setDate(x.getDate() - 1); }
+  return dateKey(x);
+}
+function currentGameDay(){ return gameDay(new Date()); }
 function fmtDate(d){ return DAYS_FR[d.getDay()]+' '+d.getDate()+' '+MONTHS_FR[d.getMonth()] }
 function fmtWeek(mon){
   var fri=new Date(mon); fri.setDate(mon.getDate()+4);
@@ -673,8 +694,11 @@ async function loadApp(){
 // ── SCORES PAGE ────────────────────────────────────────
 function initScoresPage(){
   var today=new Date();
-  document.getElementById('today-label').textContent=fmtDate(today);
-  if(isWeekend(today)){
+  // Journée de jeu : si avant 9h, on affiche la date de la veille
+  var gd=new Date();
+  if(gd.getHours()<9){ gd.setDate(gd.getDate()-1); }
+  document.getElementById('today-label').textContent=fmtDate(gd);
+  if(isWeekend(gd)){
     document.getElementById('weekend-block').style.display='';
     document.getElementById('scores-block').style.display='none';
     return;
@@ -700,7 +724,7 @@ function buildGamesGrid(){
 }
 
 async function loadExistingScores(){
-  var dk=dateKey(new Date());
+  var dk=currentGameDay();
   var {data} = await sb.from('scores').select('*').eq('user_id',currentUser.id).eq('date',dk);
   if(!data||!data.length) return;
   data.forEach(function(r){
@@ -734,7 +758,7 @@ async function sendScores(){
   var rows=GAMES.map(function(g){
     var mm=parseInt(timeVals[g.slug].mm)||0;
     var ss=parseInt(timeVals[g.slug].ss)||0;
-    return {user_id:currentUser.id,game:g.slug,date:dateKey(new Date()),time_secs:mm*60+ss};
+    return {user_id:currentUser.id,game:g.slug,date:currentGameDay(),time_secs:mm*60+ss};
   });
   var {error}=await sb.from('scores').upsert(rows,{onConflict:'user_id,game,date'});
   if(error){showToast('❌ Erreur: '+error.message);return}
@@ -742,7 +766,7 @@ async function sendScores(){
   document.getElementById('send-btn').textContent='🔄 Mettre à jour';
   document.getElementById('sent-msg').style.display='block';
   // Auto-refresh classement
-  if(viewDate && dateKey(viewDate)===dateKey(new Date())){
+  if(viewDate && dateKey(viewDate)===currentGameDay()){
     loadClassement();
   }
 }
@@ -755,7 +779,7 @@ function initClassementPage(){
 
 function updateDayLabel(){
   document.getElementById('day-label-cl').textContent=fmtDate(viewDate);
-  var isToday=dateKey(viewDate)===dateKey(new Date());
+  var isToday=dateKey(viewDate)===currentGameDay();
   document.getElementById('day-next').disabled=isToday;
   document.getElementById('day-next').style.opacity=isToday?'.4':'1';
 }
@@ -1296,7 +1320,7 @@ function initAdmin(){
   // Show admin tab
   document.getElementById('tab-admin').style.display='';
   // Set today as default date
-  document.getElementById('admin-date').value = dateKey(new Date());
+  document.getElementById('admin-date').value = currentGameDay();
   // Populate player select
   var sel = document.getElementById('admin-player');
   sel.innerHTML = '<option value="">-- Choisir --</option>';
@@ -1330,6 +1354,56 @@ async function adminSaveScore(){
   // Reset time fields
   document.getElementById('admin-mm').value = '';
   document.getElementById('admin-ss').value = '';
+}
+
+async function adminTriggerRappel(){
+  if(!confirm('Envoyer les rappels par email aux joueurs qui n\'ont pas encore joué ?')) return;
+  showToast('⏳ Envoi des rappels...');
+  try {
+    var res = await fetch(SUPA_URL + '/functions/v1/rappel-quotidien', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: '{}'
+    });
+    var data = await res.json();
+    if(data.envoyes !== undefined){
+      showToast('✅ ' + data.envoyes + ' rappel(s) envoyé(s)');
+    } else if(data.error){
+      showToast('❌ ' + data.error);
+    } else {
+      showToast('✅ Rappels traités');
+    }
+  } catch(e){
+    showToast('❌ Erreur: ' + e.message);
+  }
+}
+
+async function adminTriggerRecap(){
+  if(!confirm('Envoyer le récap de la semaine à TOUS les joueurs ?')) return;
+  showToast('⏳ Génération du récap...');
+  try {
+    var res = await fetch(SUPA_URL + '/functions/v1/recap-hebdo', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: '{}'
+    });
+    var data = await res.json();
+    if(data.ok){
+      showToast('✅ Récap envoyé ! Gagnant: ' + data.winner);
+    } else if(data.error){
+      showToast('❌ ' + data.error);
+    } else {
+      showToast('✅ Récap traité');
+    }
+  } catch(e){
+    showToast('❌ Erreur: ' + e.message);
+  }
 }
 
 // ── INIT ───────────────────────────────────────────────
