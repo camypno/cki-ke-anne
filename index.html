@@ -131,20 +131,51 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-
 .gt{font-family:'Fredoka One',cursive;font-size:.92rem;color:var(--blue)}
 .gp{font-size:.74rem;color:var(--muted);margin-left:6px}
 
+/* JEU DU JOUR */
+.gameday-bar{background:#eff6ff;border:2px solid #93c5fd;border-radius:var(--r);padding:14px 16px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px;box-shadow:0 3px 0 #bfdbfe}
+.gameday-bar .big{font-size:1.9rem;flex-shrink:0;line-height:1}
+.gameday-bar strong{font-family:'Fredoka One',cursive;font-size:1.08rem;display:block;color:var(--text)}
+.gameday-bar p{color:var(--text2);font-size:.86rem;margin-top:3px;line-height:1.4}
+.gameday-bar .next{color:var(--blue);font-weight:800}
+.gameday-bar .hint{color:var(--muted);font-size:.74rem}
+.gameday-bar.fresh{background:#f0fdf4;border-color:#86efac;box-shadow:0 3px 0 #bbf7d0}
+.btn-reload{background:var(--green);border:2px solid #16a34a;color:#fff;padding:5px 14px;border-radius:20px;font-weight:900;font-size:.82rem;cursor:pointer;font-family:'Nunito',sans-serif;margin-top:6px}
+.next-mini{font-size:.8rem;font-weight:800;color:var(--blue);margin:-8px 0 16px}
+
 /* STATS */
-.period-tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.period-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
 .ptab{background:var(--card);border:2px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:20px;cursor:pointer;font-weight:800;font-size:.82rem;transition:all .2s;-webkit-tap-highlight-color:transparent}
 .ptab.on{background:var(--purple);border-color:#7c3aed;color:#fff;box-shadow:0 2px 0 #7c3aed}
-.player-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.ptrtab{background:var(--card);border:2px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:20px;cursor:pointer;font-weight:700;font-size:.82rem;transition:all .2s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:5px}
-.ptrtab.on{background:var(--card2);border-color:var(--yellow)}
-.chart-wrap{background:var(--card);border:2px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:18px;box-shadow:0 3px 0 var(--border)}
-.chart-title{font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:14px;color:var(--text2)}
-.chart-canvas-wrap{position:relative;width:100%;overflow-x:auto}
-canvas{display:block}
-.chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-.leg-item{display:flex;align-items:center;gap:5px;font-size:.78rem;font-weight:700}
-.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.hero2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+@media(max-width:420px){.hero2{grid-template-columns:1fr}}
+.hero{border-radius:var(--r);padding:14px 15px;border:2px solid}
+.hero-anne{background:#fff1f2;border-color:#fca5a5;box-shadow:0 3px 0 #fca5a5}
+.hero-boss{background:#fffbeb;border-color:var(--yellow);box-shadow:0 3px 0 var(--yellow2)}
+.hero-top{display:flex;align-items:center;gap:8px}
+.hero-emoji{font-size:1.8rem;line-height:1}
+.hero-lbl{font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.hero-name{font-family:'Fredoka One',cursive;font-size:1.25rem;margin-top:6px}
+.hero-anne .hero-name{color:var(--red)}
+.hero-boss .hero-name{color:var(--orange)}
+.hero-stat{font-size:.8rem;color:var(--text2);margin-top:3px;font-weight:700;line-height:1.45}
+.srow{display:flex;align-items:flex-start;padding:11px 15px;border-bottom:2px dashed var(--border)}
+.srow:last-child{border-bottom:none}
+.srow.me{background:#eff6ff}
+.srow .rnum{padding-top:2px}
+.smain{flex:1;min-width:0}
+.sline{display:flex;align-items:center;gap:6px}
+.sline .rname{flex:1;min-width:0}
+.sbadges{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px;font-size:.76rem;font-weight:800;color:var(--text2)}
+.sform{margin-top:3px;font-size:.95rem;letter-spacing:2px}
+.sform span{font-size:.68rem;font-weight:800;color:var(--muted);letter-spacing:0;margin-right:4px;text-transform:uppercase}
+.gstat{background:var(--card);border:2px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 3px 0 var(--border);margin-bottom:12px}
+.gstat-body{padding:10px 14px}
+.bar-row{display:grid;grid-template-columns:88px 1fr 64px;gap:8px;align-items:center;margin:7px 0;font-size:.84rem}
+.bar-name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{background:var(--bg);border-radius:10px;height:14px;overflow:hidden;border:1.5px solid var(--border)}
+.bar-fill{height:100%;border-radius:10px}
+.bar-val{font-family:'Fredoka One',cursive;font-size:.88rem;color:var(--blue);text-align:right;white-space:nowrap}
+.gnotes{font-size:.75rem;color:var(--text2);margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);line-height:1.6;font-weight:700}
 
 /* PROFILE */
 .pfwrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -279,7 +310,8 @@ canvas{display:block}
 
   <!-- SCORES -->
   <div class="page" id="p-scores">
-    <div class="stitle">📝 Mes scores du jour <span class="dbadge" id="today-label"></span></div>
+    <div class="stitle">📝 Mes scores <span class="dbadge" id="today-label"></span></div>
+    <div class="gameday-bar" id="gameday-bar"></div>
     <a href="https://www.linkedin.com/games/" target="_blank" style="display:inline-flex;align-items:center;gap:7px;background:var(--card);border:2px solid var(--border);padding:7px 14px;border-radius:30px;font-weight:800;font-size:.85rem;color:var(--text2);text-decoration:none;margin-bottom:16px;box-shadow:0 2px 0 var(--border)">🎮 Jouer sur LinkedIn</a>
     <div id="weekend-block" style="display:none">
       <div class="weekend-msg"><span class="big">😴</span><p>C'est le week-end ! Repose-toi.</p></div>
@@ -301,6 +333,7 @@ canvas{display:block}
       <span class="daylbl" id="day-label-cl"></span>
       <button class="arw" onclick="changeDay(1)" id="day-next">▶</button>
     </div>
+    <div class="next-mini" id="next-mini-cl"></div>
     <div id="cl-content"><div class="loading">⏳</div></div>
   </div>
 
@@ -317,26 +350,18 @@ canvas{display:block}
 
   <!-- STATS -->
   <div class="page" id="p-stats">
-    <div class="stitle">📈 Stats & évolution</div>
+    <div class="stitle">📈 Stats : c ki le plus nul ?</div>
     <div class="period-tabs" id="period-tabs">
-      <div class="ptab on" data-period="week">Cette semaine</div>
-      <div class="ptab" data-period="month">Ce mois</div>
-      <div class="ptab" data-period="3months">3 mois</div>
+      <div class="ptab on" data-period="week">Semaine</div>
+      <div class="ptab" data-period="month">Mois</div>
+      <div class="ptab" data-period="season">Saison</div>
     </div>
-    <div class="player-tabs" id="player-filter"></div>
-    <div class="chart-wrap">
-      <div class="chart-title">🏅 Points par jour</div>
-      <div class="chart-canvas-wrap"><canvas id="chart-pts" height="220"></canvas></div>
-      <div class="chart-legend" id="chart-legend"></div>
+    <div class="day-nav">
+      <button class="arw" onclick="changeStatsPeriod(-1)" id="stats-prev">◀</button>
+      <span class="daylbl" id="stats-label"></span>
+      <button class="arw" onclick="changeStatsPeriod(1)" id="stats-next">▶</button>
     </div>
-    <div class="chart-wrap">
-      <div class="chart-title" id="game-chart-title">⚡ Temps — Zip</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="game-sel"></div>
-      <div class="chart-canvas-wrap"><canvas id="chart-game" height="200"></canvas></div>
-    </div>
-    <div class="divider"></div>
-    <div class="sub" id="period-rank-title">📊 Classement période</div>
-    <div id="period-ranking"></div>
+    <div id="stats-content"><div class="loading">⏳</div></div>
   </div>
 
   <!-- LIGUES -->
@@ -433,10 +458,13 @@ canvas{display:block}
     <div class="pcard" style="max-width:480px;margin-top:16px">
       <div class="flabel" style="margin-bottom:12px">Actions emails</div>
       <button class="btn" onclick="adminTriggerRappel()" style="width:100%;margin-bottom:10px">📧 Envoyer les rappels du jour</button>
-      <button class="btn" onclick="adminTriggerRecap()" style="width:100%;background:var(--purple);border-color:#7c3aed;box-shadow:0 4px 0 #7c3aed">📊 Envoyer le récap de la semaine</button>
+      <button class="btn" onclick="adminTriggerRecap()" style="width:100%;margin-bottom:10px;background:var(--purple);border-color:#7c3aed;box-shadow:0 4px 0 #7c3aed">📊 Envoyer le récap de la semaine</button>
+      <button class="btn-outline" onclick="adminTriggerRecap({test:true})" style="width:100%;margin-bottom:8px">🧪 Récap test (moi seulement)</button>
+      <button class="btn-outline" onclick="adminTriggerRecap({test:true,compare:true})" style="width:100%">🧪 Comparer les IA (moi seulement)</button>
       <p style="font-size:.78rem;color:var(--muted);margin-top:10px;line-height:1.4">
-        Les rappels ne partent qu'aux joueurs qui n'ont pas encore joué. Le récap part à tout le monde.
+        Les rappels ne partent qu'aux joueurs qui n'ont pas encore joué. Le récap part à tout le monde. Les boutons 🧪 n'envoient qu'à toi.
       </p>
+      <p id="admin-recap-status" style="font-size:.78rem;color:var(--text2);margin-top:8px;line-height:1.4;font-weight:700"></p>
     </div>
   </div>
 
@@ -489,16 +517,18 @@ var AVATARS = [
 var PLAYER_COLORS = ['#f59e0b','#f472b6','#8b5cf6','#22c55e','#3b82f6','#ef4444','#06b6d4','#fb923c','#a3e635'];
 
 var MONTHS_FR = ['jan','fév','mar','avr','mai','jun','jul','aoû','sep','oct','nov','déc'];
+var MONTHS_FR_LONG = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 var DAYS_FR   = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+var DAYS_FR_LONG = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
 
 // ── State ──────────────────────────────────────────────
 var currentUser = null;
 var currentProfile = null;
-var viewDate = new Date();
-var viewMonday = getMonday(new Date());
+var viewDate = null;    // initialisé dans loadApp() sur le jour de jeu
+var viewMonday = null;
 var activePeriod = 'week';
-var activePlayers = [];
-var activeGame = 'zip';
+var statsAnchor = null; // date de référence de la période affichée dans Stats
+var scoresDayKey = null; // jour de jeu figé à l'ouverture de la page Scores
 var allProfiles = [];
 var curAv = '🦊';
 var timeVals = {};
@@ -506,15 +536,47 @@ GAMES.forEach(function(g){ timeVals[g.slug]={mm:'',ss:''} });
 
 // ── Helpers ────────────────────────────────────────────
 function fmtS(s){ var m=Math.floor(s/60),sec=s%60; return (m<10?'0':'')+m+':'+(sec<10?'0':'')+sec }
-function dateKey(d){ return d.toISOString().slice(0,10) }
-// Journée de jeu : de 9h à 9h le lendemain. Avant 9h = jour précédent.
-function gameDay(d){
-  var x = new Date(d);
-  if(x.getHours() < 9){ x.setDate(x.getDate() - 1); }
-  return dateKey(x);
+function pad2(n){ return (n<10?'0':'')+n }
+// Date locale -> 'YYYY-MM-DD' (sans passer par l'UTC, sinon décalage autour de minuit)
+function dateKey(d){ return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate()) }
+// 'YYYY-MM-DD' -> Date à midi (à l'abri des changements d'heure)
+function keyToDate(k){ return new Date(k+'T12:00:00') }
+
+// Jour de jeu LinkedIn : les jeux changent à minuit heure de Californie
+// (9h en France, 8h pendant les semaines où l'heure d'été n'est pas synchro).
+var LA_FMT = new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'});
+function laParts(d){ var o={}; LA_FMT.formatToParts(d).forEach(function(p){o[p.type]=p.value}); return o }
+function gameDayKey(d){ var p=laParts(d); return p.year+'-'+p.month+'-'+p.day }
+function currentGameDay(){ return gameDayKey(new Date()) }
+// Instant (ms) des prochains jeux après t : minuit suivant à Los Angeles
+function nextGameReset(t){
+  var p=laParts(new Date(t));
+  var elapsed=((parseInt(p.hour,10)%24)*3600+parseInt(p.minute,10)*60+parseInt(p.second,10))*1000+(t%1000);
+  var est=t+86400000-elapsed;
+  // Les jours de changement d'heure aux USA durent 23h ou 25h : on recale à l'heure près
+  for(var adj of [0,-3600000,3600000]){
+    var c=est+adj;
+    if(c>t && gameDayKey(new Date(c-1000))!==gameDayKey(new Date(c+1000))) return c;
+  }
+  return est;
 }
-function currentGameDay(){ return gameDay(new Date()); }
+// Prochain jeu qui compte (on saute le week-end) : {at: ms, key: 'YYYY-MM-DD'}
+function nextCountingGame(t){
+  var at=nextGameReset(t);
+  while(isWeekend(keyToDate(gameDayKey(new Date(at+1000))))) at=nextGameReset(at+1000);
+  return {at:at, key:gameDayKey(new Date(at+1000))};
+}
+function fmtCountdown(ms){
+  var mins=Math.max(0,Math.ceil(ms/60000));
+  var d=Math.floor(mins/1440), h=Math.floor((mins%1440)/60), m=mins%60;
+  if(d>0) return d+'j '+h+'h';
+  if(h>0) return h+'h'+pad2(m);
+  return m+' min';
+}
+function fmtHour(ms){ var d=new Date(ms); return d.getHours()+'h'+pad2(d.getMinutes()) }
+
 function fmtDate(d){ return DAYS_FR[d.getDay()]+' '+d.getDate()+' '+MONTHS_FR[d.getMonth()] }
+function fmtDateLong(d){ return DAYS_FR_LONG[d.getDay()]+' '+d.getDate()+' '+MONTHS_FR[d.getMonth()] }
 function fmtWeek(mon){
   var fri=new Date(mon); fri.setDate(mon.getDate()+4);
   return 'Lun '+mon.getDate()+' → Ven '+fri.getDate()+' '+MONTHS_FR[fri.getMonth()];
@@ -574,6 +636,40 @@ function calcGlobal(perGame){
 function colorForUser(uid){
   var idx=allProfiles.findIndex(function(p){return p.id===uid});
   return PLAYER_COLORS[idx%PLAYER_COLORS.length]||'#888';
+}
+function profileOf(uid){ return allProfiles.find(function(p){return p.id===uid})||{} }
+
+// Classement d'une journée (mêmes règles partout : classement, semaine, stats, profil)
+function dayRanking(dayRows){
+  var byGame={};
+  GAMES.forEach(function(g){byGame[g.slug]=[]});
+  dayRows.forEach(function(r){
+    var p=r.profiles||profileOf(r.user_id);
+    if(byGame[r.game]) byGame[r.game].push({userId:r.user_id,username:p.username||'?',avatar:p.avatar||'🦊',color:colorForUser(r.user_id),time_secs:r.time_secs});
+  });
+  var perGame={};
+  GAMES.forEach(function(g){if(byGame[g.slug].length) perGame[g.slug]=calcGameRank(byGame[g.slug])});
+  return {perGame:perGame, global:calcGlobal(perGame)};
+}
+
+// Lecture des scores par paquets de 1000 (Supabase plafonne chaque requête à 1000 lignes)
+async function fetchScores(fromKey,toKey){
+  var all=[], step=1000;
+  for(var i=0;;i+=step){
+    var q=sb.from('scores').select('id,user_id,game,date,time_secs');
+    if(fromKey) q=q.gte('date',fromKey);
+    if(toKey) q=q.lte('date',toKey);
+    var res=await q.order('id').range(i,i+step-1);
+    if(res.error) throw res.error;
+    all=all.concat(res.data||[]);
+    if(!res.data||res.data.length<step) break;
+  }
+  return all;
+}
+var _allScores=null;
+async function fetchAllScores(){
+  if(!_allScores) _allScores=await fetchScores(null,null);
+  return _allScores;
 }
 
 // ── Toast ──────────────────────────────────────────────
@@ -650,7 +746,11 @@ async function loadApp(){
   // load all profiles for color assignment
   var {data:profs} = await sb.from('profiles').select('id,username,avatar').order('created_at');
   allProfiles=profs||[];
-  activePlayers=allProfiles.map(function(x){return x.id});
+
+  // Toutes les vues partent du jour de jeu LinkedIn (et pas de la date du téléphone)
+  viewDate=keyToDate(currentGameDay());
+  viewMonday=getMonday(viewDate);
+  statsAnchor=keyToDate(currentGameDay());
 
   // update header
   document.getElementById('header-user').textContent=currentProfile.avatar+' '+currentProfile.username;
@@ -677,6 +777,7 @@ async function loadApp(){
     if(t.dataset.tab==='semaine') loadSemaine();
     if(t.dataset.tab==='stats')   setTimeout(function(){loadStats()},50);
     if(t.dataset.tab==='ligues')  buildLigues();
+    if(t.dataset.tab==='profil')  loadProfileStats();
     if(t.dataset.tab==='mur')     { loadMur(); clearMurBadge(); }
     if(t.dataset.tab==='admin')   return;
   });
@@ -685,18 +786,22 @@ async function loadApp(){
   document.getElementById('period-tabs').addEventListener('click',function(e){
     var t=e.target; if(!t.dataset.period) return;
     activePeriod=t.dataset.period;
+    statsAnchor=keyToDate(currentGameDay());
     document.querySelectorAll('#period-tabs .ptab').forEach(function(x){x.classList.remove('on')});
     t.classList.add('on');
     loadStats();
   });
+
+  // bandeau "Jeu du jour" + compte à rebours
+  updateGameDayUI();
+  setInterval(updateGameDayUI, 30000);
 }
 
 // ── SCORES PAGE ────────────────────────────────────────
 function initScoresPage(){
-  var today=new Date();
-  // Journée de jeu : si avant 9h, on affiche la date de la veille
-  var gd=new Date();
-  if(gd.getHours()<9){ gd.setDate(gd.getDate()-1); }
+  // Le jour est figé à l'ouverture : ce qui est affiché = ce qui sera enregistré
+  scoresDayKey=currentGameDay();
+  var gd=keyToDate(scoresDayKey);
   document.getElementById('today-label').textContent=fmtDate(gd);
   if(isWeekend(gd)){
     document.getElementById('weekend-block').style.display='';
@@ -705,6 +810,46 @@ function initScoresPage(){
   }
   buildGamesGrid();
   loadExistingScores();
+}
+
+// Bandeau "Jeu du jour" (page Scores) + rappel compact (page Classement)
+function updateGameDayUI(){
+  var bar=document.getElementById('gameday-bar');
+  var mini=document.getElementById('next-mini-cl');
+  if(!scoresDayKey) return;
+  var now=Date.now();
+  var shownDay=keyToDate(scoresDayKey);
+  var nextAt=nextGameReset(now);
+  var nextKey=gameDayKey(new Date(nextAt+1000));
+  var counting=nextCountingGame(now);
+  var html;
+  if(currentGameDay()!==scoresDayKey){
+    // Les nouveaux jeux sont sortis depuis l'ouverture de la page
+    bar.className='gameday-bar fresh';
+    html='<span class="big">🆕</span><div>'
+      +'<strong>Les jeux du '+fmtDateLong(keyToDate(currentGameDay()))+' sont sortis !</strong>'
+      +'<p>Cette page est encore sur le jeu du '+fmtDateLong(shownDay)+'. Recharge-la pour saisir les nouveaux scores.</p>'
+      +'<button class="btn-reload" onclick="location.reload()">🔄 Recharger</button></div>';
+  } else if(isWeekend(shownDay)){
+    bar.className='gameday-bar';
+    html='<span class="big">😴</span><div>'
+      +'<strong>Jeu du jour : '+fmtDateLong(shownDay)+' (week-end, ça ne compte pas)</strong>'
+      +'<p class="next">⏳ Prochain jeu qui compte dans <b>'+fmtCountdown(counting.at-now)+'</b> ('+DAYS_FR_LONG[keyToDate(counting.key).getDay()]+' à '+fmtHour(counting.at)+')</p>'
+      +'<p class="hint">Les jeux LinkedIn changent à minuit heure de Californie.</p></div>';
+  } else {
+    bar.className='gameday-bar';
+    // Tôt le matin, la date du téléphone a déjà changé mais pas les jeux LinkedIn
+    var early=dateKey(new Date())!==scoresDayKey;
+    html='<span class="big">🎮</span><div>'
+      +'<strong>Jeu du jour : '+fmtDateLong(shownDay)+'</strong>'
+      +(early
+        ? '<p>⚠️ Les jeux d\'aujourd\'hui ne sont pas encore sortis : tu saisis encore ceux d\'<b>hier</b> ('+DAYS_FR_LONG[shownDay.getDay()]+').</p>'
+        : '<p>Ce sont les scores de ce jeu-là que tu saisis.</p>')
+      +'<p class="next">⏳ Prochain jeu dans <b>'+fmtCountdown(nextAt-now)+'</b> ('+DAYS_FR_LONG[keyToDate(nextKey).getDay()]+' à '+fmtHour(nextAt)+')</p>'
+      +'<p class="hint">Les jeux LinkedIn changent à minuit heure de Californie.</p></div>';
+  }
+  bar.innerHTML=html;
+  if(mini) mini.textContent='⏳ Prochain jeu dans '+fmtCountdown(nextAt-now)+' ('+fmtHour(nextAt)+')';
 }
 
 function buildGamesGrid(){
@@ -724,7 +869,7 @@ function buildGamesGrid(){
 }
 
 async function loadExistingScores(){
-  var dk=currentGameDay();
+  var dk=scoresDayKey;
   var {data} = await sb.from('scores').select('*').eq('user_id',currentUser.id).eq('date',dk);
   if(!data||!data.length) return;
   data.forEach(function(r){
@@ -755,18 +900,26 @@ function updT(slug,field,val){
 async function sendScores(){
   var allOk=GAMES.every(function(g){return timeVals[g.slug].mm!==''||timeVals[g.slug].ss!==''});
   if(!allOk){showToast('⚠️ Remplis tous les jeux !');return}
+  // Page ouverte avant la sortie des nouveaux jeux : on demande avant d'écrire sur l'ancien jour
+  if(currentGameDay()!==scoresDayKey){
+    var ok=confirm('⚠️ Les jeux du '+fmtDateLong(keyToDate(currentGameDay()))+' sont sortis.\n\n'
+      +'Ces scores vont être enregistrés pour le jeu du '+fmtDateLong(keyToDate(scoresDayKey))+'.\n\n'
+      +'OK = enregistrer pour le '+fmtDateLong(keyToDate(scoresDayKey))+'\nAnnuler = je recharge la page');
+    if(!ok){ location.reload(); return; }
+  }
   var rows=GAMES.map(function(g){
     var mm=parseInt(timeVals[g.slug].mm)||0;
     var ss=parseInt(timeVals[g.slug].ss)||0;
-    return {user_id:currentUser.id,game:g.slug,date:currentGameDay(),time_secs:mm*60+ss};
+    return {user_id:currentUser.id,game:g.slug,date:scoresDayKey,time_secs:mm*60+ss};
   });
   var {error}=await sb.from('scores').upsert(rows,{onConflict:'user_id,game,date'});
   if(error){showToast('❌ Erreur: '+error.message);return}
   showToast('✅ Scores envoyés !');
   document.getElementById('send-btn').textContent='🔄 Mettre à jour';
   document.getElementById('sent-msg').style.display='block';
+  _allScores=null; // les stats devront relire les scores
   // Auto-refresh classement
-  if(viewDate && dateKey(viewDate)===currentGameDay()){
+  if(viewDate && dateKey(viewDate)===scoresDayKey){
     loadClassement();
   }
 }
@@ -798,15 +951,9 @@ async function loadClassement(){
     document.getElementById('cl-content').innerHTML='<div class="loading">😶 Personne n\'a soumis ses scores ce jour-là.</div>';
     return;
   }
-  var byGame={};
-  GAMES.forEach(function(g){byGame[g.slug]=[]});
-  data.forEach(function(r){
-    var p=r.profiles||{};
-    if(byGame[r.game]) byGame[r.game].push({userId:r.user_id,username:p.username||'?',avatar:p.avatar||'🦊',color:colorForUser(r.user_id),time_secs:r.time_secs});
-  });
-  var perGame={};
-  GAMES.forEach(function(g){if(byGame[g.slug].length) perGame[g.slug]=calcGameRank(byGame[g.slug])});
-  var global=calcGlobal(perGame);
+  var dr=dayRanking(data);
+  var perGame=dr.perGame;
+  var global=dr.global;
   var anne=global[global.length-1];
 
   var html='';
@@ -841,7 +988,7 @@ async function loadClassement(){
 // ── SEMAINE ────────────────────────────────────────────
 function updateWeekLabel(){
   document.getElementById('week-label').textContent=fmtWeek(viewMonday);
-  var thisMonday=getMonday(new Date());
+  var thisMonday=getMonday(keyToDate(currentGameDay()));
   var isThis=dateKey(viewMonday)===dateKey(thisMonday);
   document.getElementById('week-next').disabled=isThis;
   document.getElementById('week-next').style.opacity=isThis?'.4':'1';
@@ -863,15 +1010,7 @@ async function loadSemaine(){
   days.forEach(function(d){
     var dk=dateKey(d);
     var dayRows=data.filter(function(r){return r.date===dk});
-    var byGame={};
-    GAMES.forEach(function(g){byGame[g.slug]=[]});
-    dayRows.forEach(function(r){
-      var p=r.profiles||{};
-      if(byGame[r.game]) byGame[r.game].push({userId:r.user_id,username:p.username||'?',avatar:p.avatar||'🦊',color:colorForUser(r.user_id),time_secs:r.time_secs});
-    });
-    var pg={};
-    GAMES.forEach(function(g){if(byGame[g.slug].length) pg[g.slug]=calcGameRank(byGame[g.slug])});
-    calcGlobal(pg).forEach(function(u){
+    dayRanking(dayRows).global.forEach(function(u){
       if(!totals[u.userId]) totals[u.userId]={userId:u.userId,username:u.username,avatar:u.avatar,pts:0};
       totals[u.userId].pts+=u.pts;
     });
@@ -890,209 +1029,165 @@ async function loadSemaine(){
 }
 
 // ── STATS ──────────────────────────────────────────────
-var statsData=[];
-
-async function loadStats(){
-  var today=new Date();
-  var start;
-  if(activePeriod==='week') start=getMonday(today);
-  else if(activePeriod==='month'){start=new Date(today.getFullYear(),today.getMonth(),1)}
-  else {start=new Date(today.getFullYear(),today.getMonth()-2,1)}
-  var {data}=await sb.from('scores').select('*, profiles(username,avatar)').gte('date',dateKey(start)).lte('date',dateKey(today));
-  statsData=data||[];
-  buildPlayerFilterUI();
-  drawCharts();
-}
-
-function buildPlayerFilterUI(){
-  var seen={};
-  statsData.forEach(function(r){
-    var p=r.profiles||{};
-    if(!seen[r.user_id]) seen[r.user_id]={id:r.user_id,username:p.username||'?',avatar:p.avatar||'🦊'};
-  });
-  var players=Object.values(seen);
-  if(!players.length) return;
-  if(!activePlayers.length) activePlayers=players.map(function(p){return p.id});
-  var html='';
-  players.forEach(function(p){
-    var on=activePlayers.indexOf(p.id)!==-1;
-    html+='<div class="ptrtab'+(on?' on':'')+'" onclick="togglePlayer(\''+p.id+'\')">'
-      +p.avatar+' '+p.username+'</div>';
-  });
-  document.getElementById('player-filter').innerHTML=html;
-}
-
-function togglePlayer(id){
-  var i=activePlayers.indexOf(id);
-  if(i===-1) activePlayers.push(id);
-  else if(activePlayers.length>1) activePlayers.splice(i,1);
-  buildPlayerFilterUI(); drawCharts();
-}
-
-function drawCharts(){
-  if(!statsData.length) return;
-  // Build days list
-  var datesSet={};
-  statsData.forEach(function(r){datesSet[r.date]=true});
-  var dates=Object.keys(datesSet).sort();
-
-  // Collect players info
-  var playerMap={};
-  statsData.forEach(function(r){
-    var p=r.profiles||{};
-    if(!playerMap[r.user_id]) playerMap[r.user_id]={id:r.user_id,username:p.username||'?',avatar:p.avatar||'🦊',color:colorForUser(r.user_id)};
-  });
-  var players=Object.values(playerMap).filter(function(p){return activePlayers.indexOf(p.id)!==-1});
-
-  // Points per player per day
-  var ptsMap={};
-  players.forEach(function(p){ptsMap[p.id]={}});
-  dates.forEach(function(dk){
-    var dayRows=statsData.filter(function(r){return r.date===dk});
-    var byGame={};
-    GAMES.forEach(function(g){byGame[g.slug]=[]});
-    dayRows.forEach(function(r){
-      var p=r.profiles||{};
-      if(byGame[r.game]) byGame[r.game].push({userId:r.user_id,username:p.username||'?',avatar:p.avatar||'🦊',color:colorForUser(r.user_id),time_secs:r.time_secs});
-    });
-    var pg={};
-    GAMES.forEach(function(g){if(byGame[g.slug].length) pg[g.slug]=calcGameRank(byGame[g.slug])});
-    calcGlobal(pg).forEach(function(u){if(ptsMap[u.userId]) ptsMap[u.userId][dk]=u.pts});
-  });
-
-  var shortDates=dates.map(function(dk){
-    var d=new Date(dk); return DAYS_FR[d.getDay()]+' '+d.getDate();
-  });
-
-  // Draw pts chart
-  var ptseries=players.map(function(p){
-    return {label:p.avatar+' '+p.username,color:p.color,data:dates.map(function(dk){return ptsMap[p.id][dk]||null})};
-  });
-  drawLineChart('chart-pts',shortDates,ptseries);
-
-  // Legend
-  var legHtml='';
-  players.forEach(function(p){
-    legHtml+='<div class="leg-item"><div class="leg-dot" style="background:'+p.color+'"></div>'+p.avatar+' '+p.username+'</div>';
-  });
-  document.getElementById('chart-legend').innerHTML=legHtml;
-
-  // Game sel
-  var ghtml='';
-  GAMES.forEach(function(g){
-    ghtml+='<div class="ptab'+(activeGame===g.slug?' on':'')+'" onclick="pickGame(\''+g.slug+'\')">'
-      +g.emoji+' '+g.name+'</div>';
-  });
-  document.getElementById('game-sel').innerHTML=ghtml;
-  drawGameChart(dates, shortDates, players);
-
-  // Period ranking
-  var ptotals={};
-  players.forEach(function(p){ptotals[p.id]={userId:p.id,username:p.username,avatar:p.avatar,pts:0}});
-  dates.forEach(function(dk){
-    var dayRows=statsData.filter(function(r){return r.date===dk});
-    var byGame={};
-    GAMES.forEach(function(g){byGame[g.slug]=[]});
-    dayRows.forEach(function(r){
-      var pp=r.profiles||{};
-      if(byGame[r.game]) byGame[r.game].push({userId:r.user_id,username:pp.username||'?',avatar:pp.avatar||'🦊',color:colorForUser(r.user_id),time_secs:r.time_secs});
-    });
-    var pg={};
-    GAMES.forEach(function(g){if(byGame[g.slug].length) pg[g.slug]=calcGameRank(byGame[g.slug])});
-    calcGlobal(pg).forEach(function(u){if(ptotals[u.userId]) ptotals[u.userId].pts+=u.pts});
-  });
-  var parr=Object.values(ptotals).sort(function(a,b){return a.pts-b.pts});
-  var rank=1; parr.forEach(function(x,i){if(i>0&&x.pts!==parr[i-1].pts)rank=i+1;x.rank=rank});
-  var pLabels={week:'cette semaine',month:'ce mois','3months':'ces 3 mois'};
-  document.getElementById('period-rank-title').textContent='📊 Classement — '+pLabels[activePeriod];
-  var phtml='<div class="rtable"><div class="card-body">';
-  parr.forEach(function(u,i){ phtml+=rankingRow(u,i,parr.length,u.userId===currentUser.id) });
-  phtml+='</div></div>';
-  document.getElementById('period-ranking').innerHTML=phtml;
-}
-
-function pickGame(slug){
-  activeGame=slug;
-  var g=GAMES.find(function(x){return x.slug===slug});
-  document.getElementById('game-chart-title').textContent=g.emoji+' Temps — '+g.name;
-  document.querySelectorAll('#game-sel .ptab').forEach(function(x){x.classList.remove('on');if(x.textContent===g.emoji+' '+g.name)x.classList.add('on')});
-  var dates=[];
-  var dset={};statsData.forEach(function(r){dset[r.date]=true});
-  dates=Object.keys(dset).sort();
-  var shortDates=dates.map(function(dk){var d=new Date(dk);return DAYS_FR[d.getDay()]+' '+d.getDate()});
-  var playerMap={};
-  statsData.forEach(function(r){var p=r.profiles||{};if(!playerMap[r.user_id])playerMap[r.user_id]={id:r.user_id,username:p.username||'?',avatar:p.avatar||'🦊',color:colorForUser(r.user_id)}});
-  var players=Object.values(playerMap).filter(function(p){return activePlayers.indexOf(p.id)!==-1});
-  drawGameChart(dates,shortDates,players);
-}
-
-function drawGameChart(dates,shortDates,players){
-  var series=players.map(function(p){
-    return {label:p.avatar+' '+p.username,color:p.color,data:dates.map(function(dk){
-      var row=statsData.find(function(r){return r.user_id===p.id&&r.date===dk&&r.game===activeGame});
-      return row?row.time_secs:null;
-    })};
-  });
-  drawLineChart('chart-game',shortDates,series);
-}
-
-// ── Canvas chart ────────────────────────────────────────
-function drawLineChart(canvasId,labels,series){
-  var canvas=document.getElementById(canvasId);
-  if(!canvas) return;
-  var wrap=canvas.parentElement;
-  var W=Math.max(wrap.offsetWidth||320,labels.length*30+80);
-  canvas.width=W; canvas.height=parseInt(canvas.getAttribute('height'))||200;
-  var H=canvas.height;
-  var PAD={top:20,right:20,bottom:36,left:46};
-  var cw=W-PAD.left-PAD.right, ch=H-PAD.top-PAD.bottom;
-  var ctx=canvas.getContext('2d');
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,W,H);
-
-  var allVals=[];
-  series.forEach(function(s){s.data.forEach(function(v){if(v!==null)allVals.push(v)})});
-  if(!allVals.length){ctx.fillStyle='#a8a29e';ctx.font='700 12px Nunito,sans-serif';ctx.textAlign='center';ctx.fillText('Pas encore de données',W/2,H/2);return}
-
-  var minV=Math.min.apply(null,allVals), maxV=Math.max.apply(null,allVals);
-  var pad=(maxV-minV)*0.15||5;
-  minV=Math.max(0,minV-pad); maxV=maxV+pad;
-
-  function xPos(i){return PAD.left+(labels.length>1?i/(labels.length-1):0.5)*cw}
-  function yPos(v){return PAD.top+ch-(((v-minV)/(maxV-minV||1))*ch)}
-
-  // Grid
-  ctx.strokeStyle='#f0e8c0'; ctx.lineWidth=1;
-  for(var gi=0;gi<=4;gi++){
-    var gy=PAD.top+(gi/4)*ch;
-    ctx.beginPath();ctx.moveTo(PAD.left,gy);ctx.lineTo(PAD.left+cw,gy);ctx.stroke();
-    ctx.fillStyle='#a8a29e';ctx.font='700 10px Nunito,sans-serif';ctx.textAlign='right';
-    ctx.fillText(Math.round(maxV-gi*(maxV-minV)/4),PAD.left-5,gy+4);
+// Bornes de la période affichée
+function statsRange(){
+  var todayKey=currentGameDay();
+  var a=statsAnchor;
+  if(activePeriod==='week'){
+    var mon=getMonday(a);
+    return {from:dateKey(mon), to:dateKey(addDays(mon,4)), label:fmtWeek(mon), nav:true,
+      canNext:dateKey(addDays(mon,7))<=todayKey};
   }
-  // X labels
-  var step=Math.max(1,Math.ceil(labels.length/10));
-  ctx.fillStyle='#a8a29e';ctx.font='700 10px Nunito,sans-serif';ctx.textAlign='center';
-  labels.forEach(function(l,i){
-    if(i%step===0||i===labels.length-1) ctx.fillText(l,xPos(i),H-8);
+  if(activePeriod==='month'){
+    var first=new Date(a.getFullYear(),a.getMonth(),1,12);
+    var last=new Date(a.getFullYear(),a.getMonth()+1,0,12);
+    var nextFirst=new Date(a.getFullYear(),a.getMonth()+1,1,12);
+    return {from:dateKey(first), to:dateKey(last), label:MONTHS_FR_LONG[a.getMonth()]+' '+a.getFullYear(), nav:true,
+      canNext:dateKey(nextFirst)<=todayKey};
+  }
+  return {from:null, to:null, label:'Toute la saison', nav:false, canNext:false};
+}
+
+function changeStatsPeriod(n){
+  if(activePeriod==='week') statsAnchor=addDays(statsAnchor,7*n);
+  else if(activePeriod==='month') statsAnchor=new Date(statsAnchor.getFullYear(),statsAnchor.getMonth()+n,1,12);
+  loadStats();
+}
+
+var _statsReq=0;
+async function loadStats(){
+  var rg=statsRange();
+  document.getElementById('stats-label').textContent=rg.label;
+  document.getElementById('stats-prev').style.display=rg.nav?'':'none';
+  var nx=document.getElementById('stats-next');
+  nx.style.display=rg.nav?'':'none';
+  nx.disabled=!rg.canNext; nx.style.opacity=rg.canNext?'1':'.4';
+  var box=document.getElementById('stats-content');
+  box.innerHTML='<div class="loading">⏳</div>';
+  var req=++_statsReq;
+  var rows;
+  try {
+    rows = rg.from ? await fetchScores(rg.from,rg.to) : await fetchAllScores();
+  } catch(e){
+    box.innerHTML='<div class="loading">❌ '+(e.message||e)+'</div>';
+    return;
+  }
+  if(req!==_statsReq) return; // une autre période a été demandée entre-temps
+  var st=computeStats(rows);
+  if(!st.players.length){
+    box.innerHTML='<div class="loading">😶 Aucun score sur cette période.</div>';
+    return;
+  }
+  box.innerHTML=renderStats(st);
+}
+
+// Tout ce qu'affichent la page Stats et le profil (mêmes règles de points que le classement)
+function computeStats(rows){
+  rows=rows.filter(function(r){return !isWeekend(keyToDate(r.date))});
+  var byDate={};
+  rows.forEach(function(r){(byDate[r.date]=byDate[r.date]||[]).push(r)});
+  var dates=Object.keys(byDate).sort();
+  // Joueurs présents au moins une fois sur la période
+  var P={};
+  rows.forEach(function(r){
+    if(P[r.user_id]) return;
+    var p=profileOf(r.user_id);
+    P[r.user_id]={userId:r.user_id,username:p.username||'?',avatar:p.avatar||'🦊',color:colorForUser(r.user_id),
+      pts:0,days:0,rankSum:0,wins:0,anne:0,absent:0,form:[],games:{}};
   });
-  // Series
-  series.forEach(function(s){
-    ctx.strokeStyle=s.color;ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';
-    ctx.beginPath(); var started=false;
-    s.data.forEach(function(v,i){
-      if(v===null)return;
-      var x=xPos(i),y=yPos(v);
-      if(!started){ctx.moveTo(x,y);started=true}else ctx.lineTo(x,y);
-    });
-    ctx.stroke();
-    s.data.forEach(function(v,i){
-      if(v===null)return;
-      var x=xPos(i),y=yPos(v);
-      ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);
-      ctx.fillStyle=s.color;ctx.fill();
-      ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+  dates.forEach(function(dk){
+    var global=dayRanking(byDate[dk]).global;
+    if(!global.length) return;
+    var worst=global[global.length-1].pts;
+    global.forEach(function(u){
+      var s=P[u.userId]; if(!s) return;
+      var isAnne=global.length>1&&u.pts===worst&&u.rank!==1;
+      s.pts+=u.pts; s.days++; s.rankSum+=u.rank;
+      if(u.rank===1) s.wins++;
+      if(isAnne) s.anne++;
+      if(u.played===false) s.absent++;
+      s.form.push(u.played===false?'🚫':isAnne?'🍑':u.rank===1?'👑':u.rank===2?'🥈':u.rank===3?'🥉':'😐');
     });
   });
+  // Temps par jeu
+  var games={};
+  GAMES.forEach(function(g){games[g.slug]={best:null,worst:null}});
+  rows.forEach(function(r){
+    var s=P[r.user_id], G=games[r.game];
+    if(!s||!G) return;
+    (s.games[r.game]=s.games[r.game]||[]).push(r.time_secs);
+    if(!G.best||r.time_secs<G.best.secs) G.best={secs:r.time_secs,userId:r.user_id,date:r.date};
+    if(!G.worst||r.time_secs>G.worst.secs) G.worst={secs:r.time_secs,userId:r.user_id,date:r.date};
+  });
+  var players=Object.values(P).sort(function(a,b){return a.pts-b.pts});
+  var rank=1; players.forEach(function(x,i){if(i>0&&x.pts!==players[i-1].pts)rank=i+1;x.rank=rank});
+  return {players:players,games:games,days:dates.length};
+}
+
+function renderStats(st){
+  var pl=st.players;
+  var bestPts=pl[0].pts, worstPts=pl[pl.length-1].pts;
+  var bosses=pl.filter(function(p){return p.pts===bestPts});
+  var annes=pl.filter(function(p){return p.pts===worstPts});
+  function names(arr){return arr.map(function(p){return p.avatar+' '+p.username}).join(' & ')}
+  function plural(n,w){return n+' '+w+(n>1?'s':'')}
+
+  // Les deux cartes : l'Anne et le boss de la période
+  var html='<div class="hero2">';
+  if(pl.length>1){
+    var a=annes[0];
+    html+='<div class="hero hero-anne"><div class="hero-top"><span class="hero-emoji">🍑</span><span class="hero-lbl">Anne de la période</span></div>'
+      +'<div class="hero-name">'+names(annes)+'</div>'
+      +'<div class="hero-stat">'+a.pts+' pts · '+a.anne+'× Anne du jour'+(a.absent?' · '+plural(a.absent,'absence'):'')+'</div></div>';
+  }
+  var b=bosses[0];
+  html+='<div class="hero hero-boss"><div class="hero-top"><span class="hero-emoji">👑</span><span class="hero-lbl">Boss de la période</span></div>'
+    +'<div class="hero-name">'+names(bosses)+'</div>'
+    +'<div class="hero-stat">'+b.pts+' pts · '+plural(b.wins,'victoire')+' du jour</div></div>';
+  html+='</div>';
+
+  // Classement de la période
+  html+='<div class="rtable"><div class="card-head"><span>📊 Classement de la période</span>'
+    +'<span class="pill pill-y">'+plural(st.days,'jour')+'</span></div><div class="card-body">';
+  pl.forEach(function(u){
+    var isLast=pl.length>1&&u.pts===worstPts;
+    var isMe=u.userId===currentUser.id;
+    var medal=isLast?'🍑':u.rank===1?'👑':u.rank===2?'🥈':u.rank===3?'🥉':u.rank;
+    var cls=isLast?'ca':u.rank===1?'c1':u.rank===2?'c2':u.rank===3?'c3':'';
+    var avgRank=u.days?(u.rankSum/u.days).toFixed(1).replace('.',','):'—';
+    html+='<div class="srow'+(isMe?' me':'')+'"><span class="rnum '+cls+'">'+medal+'</span><div class="smain">'
+      +'<div class="sline"><span class="rav">'+u.avatar+'</span><span class="rname">'+u.username
+      +(isMe?' <span class="pill pill-me">moi</span>':'')+'</span>'
+      +'<span class="rpts">'+u.pts+'<span> pts</span></span></div>'
+      +'<div class="sbadges"><span>🍑 '+u.anne+'× Anne</span><span>👑 '+u.wins+'× 1er</span>'
+      +'<span>🚫 '+u.absent+' abs.</span><span>📍 rang moy. '+avgRank+'</span></div>'
+      +'<div class="sform"><span>Forme</span>'+u.form.slice(-5).join('')+'</div>'
+      +'</div></div>';
+  });
+  html+='</div></div>';
+
+  // Temps moyen par jeu
+  html+='<div class="sub">🎮 Temps moyen par jeu</div>';
+  GAMES.forEach(function(g){
+    var G=st.games[g.slug];
+    var arr=pl.filter(function(p){return p.games[g.slug]}).map(function(p){
+      var t=p.games[g.slug];
+      return {p:p, avg:Math.round(t.reduce(function(x,y){return x+y},0)/t.length)};
+    }).sort(function(x,y){return x.avg-y.avg});
+    if(!arr.length) return;
+    var max=arr[arr.length-1].avg||1;
+    html+='<div class="gstat"><div class="gcrtitle">'+g.emoji+' '+g.name+'</div><div class="gstat-body">';
+    arr.forEach(function(x,i){
+      var slow=arr.length>1&&i===arr.length-1;
+      html+='<div class="bar-row"><span class="bar-name">'+x.p.avatar+' '+x.p.username+'</span>'
+        +'<div class="bar-track"><div class="bar-fill" style="width:'+Math.max(4,Math.round(x.avg/max*100))+'%;background:'+x.p.color+'"></div></div>'
+        +'<span class="bar-val">'+fmtS(x.avg)+(slow?' 🐢':'')+'</span></div>';
+    });
+    html+='<div class="gnotes">⚡ Record : '+fmtS(G.best.secs)+' — '+(profileOf(G.best.userId).username||'?')+' ('+fmtDate(keyToDate(G.best.date))+')<br/>'
+      +'💩 Casserole : '+fmtS(G.worst.secs)+' — '+(profileOf(G.worst.userId).username||'?')+' ('+fmtDate(keyToDate(G.worst.date))+')</div>';
+    html+='</div></div>';
+  });
+  return html;
 }
 
 // ── RANKING ROW ────────────────────────────────────────
@@ -1166,7 +1261,6 @@ function buildProfil(){
     html+='<span class="eopt'+(e===curAv?' on':'')+'" onclick="pickAv(\''+e+'\')">'+e+'</span>';
   });
   document.getElementById('emoji-grid').innerHTML=html;
-  loadProfileStats();
 }
 
 function pickAv(e){
@@ -1189,8 +1283,10 @@ async function saveProfile(){
 
 async function loadProfileStats(){
   var uid=currentUser.id;
-  var {data:allScores}=await sb.from('scores').select('game,date').eq('user_id',uid);
-  if(!allScores||!allScores.length) return;
+  var everyone;
+  try { everyone=await fetchAllScores(); } catch(e){ return; }
+  var allScores=everyone.filter(function(r){return r.user_id===uid});
+  if(!allScores.length) return;
 
   // Days played
   var daysSet={};allScores.forEach(function(r){daysSet[r.date]=true});
@@ -1203,9 +1299,10 @@ async function loadProfileStats(){
   var favG=GAMES.find(function(g){return g.slug===favSlug});
   document.getElementById('stat-game').textContent=favG?favG.emoji:'—';
 
-  // Wins and Anne count — needs full day data, approximate with available data
-  document.getElementById('stat-wins').textContent='—';
-  document.getElementById('stat-anne').textContent='—';
+  // Victoires et fois Anne : mêmes règles que la page Stats, sur toute la saison
+  var me=computeStats(everyone).players.find(function(p){return p.userId===uid});
+  document.getElementById('stat-wins').textContent=me?me.wins:'—';
+  document.getElementById('stat-anne').textContent=me?me.anne:'—';
 }
 
 
@@ -1381,8 +1478,15 @@ async function adminTriggerRappel(){
   }
 }
 
-async function adminTriggerRecap(){
-  if(!confirm('Envoyer le récap de la semaine à TOUS les joueurs ?')) return;
+// opts : {} = vrai récap pour tous, {test:true} = moi seulement, {test:true,compare:true} = comparaison des IA
+async function adminTriggerRecap(opts){
+  opts = opts || {};
+  var msg = opts.compare ? 'Générer le récap avec chaque IA et te l\'envoyer (à toi seulement) ?'
+    : opts.test ? 'Envoyer un récap de test (à toi seulement) ?'
+    : 'Envoyer le récap de la semaine à TOUS les joueurs ?';
+  if(!confirm(msg)) return;
+  var status = document.getElementById('admin-recap-status');
+  status.textContent = '⏳ Génération du récap... (jusqu\'à 1 minute)';
   showToast('⏳ Génération du récap...');
   try {
     var res = await fetch(SUPA_URL + '/functions/v1/recap-hebdo', {
@@ -1391,17 +1495,22 @@ async function adminTriggerRecap(){
         'Authorization': 'Bearer ' + SUPA_KEY,
         'Content-Type': 'application/json'
       },
-      body: '{}'
+      body: JSON.stringify(opts)
     });
     var data = await res.json();
     if(data.ok){
-      showToast('✅ Récap envoyé ! Gagnant: ' + data.winner);
-    } else if(data.error){
-      showToast('❌ ' + data.error);
+      // Statut de chaque IA : "groq ✅ (12s)" ou "gemini ❌ clé absente"
+      var ia = (data.ia || []).map(function(x){
+        return x.provider + (x.ok ? ' ✅ (' + Math.round(x.ms/1000) + 's)' : ' ❌ ' + (x.error || ''));
+      }).join(' · ');
+      status.textContent = '✅ Envoyé à ' + data.envoyes + ' personne(s). Anne : ' + data.anne + '. IA : ' + (ia || 'texte de secours');
+      showToast('✅ Récap envoyé !');
     } else {
-      showToast('✅ Récap traité');
+      status.textContent = '❌ ' + (data.error || 'Erreur inconnue');
+      showToast('❌ ' + (data.error || 'Erreur'));
     }
   } catch(e){
+    status.textContent = '❌ Erreur: ' + e.message;
     showToast('❌ Erreur: ' + e.message);
   }
 }
